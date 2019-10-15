@@ -10,6 +10,7 @@ public class GameClock implements Runnable {
 
     @Override
     public void run() {
+        // run clock while the program exists
         while(true) {
             if(this.running) {
                 this.surface.tick();

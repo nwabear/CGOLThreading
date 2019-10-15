@@ -24,6 +24,7 @@ public class RowScrubber implements Runnable {
     public void run() {
         Graphics2D g = (Graphics2D)this.bi.getGraphics();
         while(true) {
+            // wait until the next generation needs to be calculated
             synchronized (obj) {
                 try {
                     obj.wait();
@@ -32,13 +33,16 @@ public class RowScrubber implements Runnable {
                 }
             }
 
-            for (int i = 0; i < AppContext.ROWS; i++) {
+            // calculate the next state for each cell and draw that to the row
+            for (int i = 0; i < AppContext.COLS; i++) {
                 this.row[i].calcNextTick(this.startY, i);
                 g.setColor(this.row[i].isAliveNormal() ? Color.WHITE : Color.BLACK);
                 g.fillRect(0, i, 1, 1);
             }
 
+            // draw the row to the grid image
             this.g2d.drawImage(this.bi, this.startY, 0, null);
+
             this.latch.addOne();
         }
     }

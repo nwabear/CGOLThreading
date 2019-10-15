@@ -14,6 +14,8 @@ public class ConwayCell {
     public void calcNextTick(int x, int y) {
         int neighborAlive = 0;
 
+        // get living neighbors
+        // TODO: Replace try/catch with something else
         try { if(grid[x - 1][y - 1].isAlive()) { neighborAlive++; } } catch(Exception e) { /* do nothing */ }
         try { if(grid[x - 1][y].isAlive()) { neighborAlive++; } } catch(Exception e) { /* do nothing */ }
         try { if(grid[x - 1][y + 1].isAlive()) { neighborAlive++; } } catch(Exception e) { /* do nothing */ }
@@ -23,6 +25,7 @@ public class ConwayCell {
         try { if(grid[x + 1][y].isAlive()) { neighborAlive++; } } catch(Exception e) { /* do nothing */ }
         try { if(grid[x + 1][y + 1].isAlive()) { neighborAlive++; } } catch(Exception e) { /* do nothing */ }
 
+        // calculate the next living state
         switch(neighborAlive) {
             case 2:
                 this.state[curIterator] = this.isAlive();
@@ -43,9 +46,7 @@ public class ConwayCell {
         this.state[1] = alive;
     }
 
-    public boolean isAlive() {
-        return (curIterator == 0) ? this.state[1] : this.state[0];
-    }
+    public boolean isAlive() { return (curIterator == 0) ? this.state[1] : this.state[0]; } // return the previous alive state for easier calculations
 
     public boolean isAliveNormal() {
         return this.state[curIterator];

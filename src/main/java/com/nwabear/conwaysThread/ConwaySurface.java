@@ -19,6 +19,7 @@ public class ConwaySurface extends JPanel {
     private long startTime;
 
     public ConwaySurface() {
+        // initialize board and threads
         for(int x = 0; x < this.cells.length; x++) {
             for(int y = 0; y < this.cells[0].length; y++) {
                 this.cells[x][y] = new ConwayCell();
@@ -28,13 +29,6 @@ public class ConwaySurface extends JPanel {
             t.start();
 
             this.rows.add(t);
-        }
-        //this.randomize();
-        try {
-            this.loadFile();
-        } catch(Exception e) {
-            System.out.println("Failed to load file...");
-            this.randomize();
         }
     }
 
@@ -49,33 +43,8 @@ public class ConwaySurface extends JPanel {
         this.tick();
     }
 
-    private void loadFile() throws Exception {
-        File toRead = new File("start.txt");
-        if(toRead.exists()) {
-            Scanner scan = new Scanner(toRead);
-            int w = Integer.parseInt(scan.nextLine());
-            int h = Integer.parseInt(scan.nextLine());
-
-            int x = (AppContext.COLS / 2) - (w / 2);
-            int startX = x;
-
-            int y = (AppContext.ROWS / 2) - (h / 2);
-
-            while(scan.hasNextLine()) {
-                String line = scan.nextLine();
-                for(char c : line.toCharArray()) {
-                    if(c != '.') {
-                        this.cells[x][y].setAlive(true);
-                    }
-                    x++;
-                }
-                x = startX;
-                y++;
-            }
-        }
-    }
-
     public void randomize() {
+        // randomize board
         for(ConwayCell[] row : this.cells) {
             for(ConwayCell cell : row) {
                 cell.setAlive(new Random().nextBoolean());
@@ -86,10 +55,12 @@ public class ConwaySurface extends JPanel {
     public void tick() {
         this.startTime = System.nanoTime();
 
+        // change the current generation value
         ConwayCell.setCurIterator(this.curIterator ? 0 : 1);
         ConwayCell.setGrid(this.cells);
         this.curIterator = !this.curIterator;
 
+        // start the threads
         synchronized (RowScrubber.obj) {
             RowScrubber.obj.notifyAll();
         }
