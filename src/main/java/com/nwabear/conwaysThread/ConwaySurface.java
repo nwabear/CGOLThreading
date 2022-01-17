@@ -40,7 +40,6 @@ public class ConwaySurface extends JPanel {
 
         g2d.drawImage(this.bi.getScaledInstance(AppContext.WIDTH, AppContext.HEIGHT, Image.SCALE_AREA_AVERAGING), 0, 0, null);
         System.out.println("Time of execution: " + ((System.nanoTime() - this.startTime) / 1000000));
-        this.tick();
     }
 
     public void randomize() {
